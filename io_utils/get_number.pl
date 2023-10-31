@@ -17,10 +17,6 @@ Streams in Prolog:
 
 Uses readutil module from swi-prolog.
 */
-
-/*
-Reads integer from given Stream
-*/
 read_number_from_stream(N, Stream) :- 
     is_stream(Stream) -> % If Stream is a existing stream do smth
         read_line_to_codes(Stream, Codes),
@@ -30,6 +26,10 @@ read_number_from_stream(N, Stream) :-
         type_error("Existing stream", Stream).
 
 
+
+/*
+Reads integer from given Stream
+*/
 read_integer_from_stream(N, Stream) :-
     read_number_from_stream(N, Stream),
     integer(N) -> true;
