@@ -41,5 +41,17 @@ Reads integer from standard (system) stream
 read_integer(N) :-
     read_integer_from_stream(N, user_input).
 
+/*
+Reads floats from given Stream
+*/
+read_float_from_stream(N, Stream) :-
+    read_number_from_stream(N, Stream),
+    float(N) -> true;
+        type_error("Float", N).
 
-% TODO(11jolek11): Add reading floats
+/*
+Reads float from standard (system) stream
+*/
+read_float(N) :-
+    read_float_from_stream(N, user_input).
+
