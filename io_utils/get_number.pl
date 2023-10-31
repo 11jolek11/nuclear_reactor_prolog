@@ -1,3 +1,9 @@
+:- module(get_number, [
+read_number_from_stream/2,
+read_integer_from_stream/2,
+read_integer/1
+    ]).
+
 use_module(library(readutil)). % Is it legal?
 
 /*
