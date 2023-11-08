@@ -1,9 +1,3 @@
-:- module(get_list, [
-    read_stream_lines/2,
-    read_stream_lines/1
-]).
-
-
 /*
 Reads entire Stream, stop on the end of stream (EOF symbol)
 */
