@@ -1,6 +1,3 @@
-:- module(get_yes_or_no, [
-    get_yes_or_no/1
-    ])
 /*
  Reads symbol from stdin
  */

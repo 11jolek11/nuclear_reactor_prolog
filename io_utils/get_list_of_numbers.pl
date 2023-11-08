@@ -1,8 +1,3 @@
-:- module(get_list_of_numbers, [
-    read_stream_lines_as_integers/2,
-    read_stream_lines_as_integers/1
-    ])
-
 /*
 Convert list of strings in list of numbers
 */
