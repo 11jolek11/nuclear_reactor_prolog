@@ -76,7 +76,7 @@ user_message(q_dosimeter_or_reactor) :-
 
 user_message(q_temperature_over_norm) :-
   nl,
-  write("Czy czujniki temperatury zgłaszają podwyższoną temperaturę?"), 
+  write("Czy czujniki temperatury zgłaszają podwyższoną temperaturę? (Y/N)"), 
   nl.
 
 user_message(q_co2_is_present) :-
