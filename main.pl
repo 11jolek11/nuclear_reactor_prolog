@@ -54,7 +54,7 @@ decision_tree :-
   ask_question(q_are_there_errors, get_yes_or_no, Result_2),
   (Result_2 = no ->
     % Pytanie 3
-    ask_question(q_which_system, get_char, Result_3),
+    ask_question(q_which_system, get_custom_char, Result_3),
     (Result_3 = a ->
       % Pytanie 4
       ask_question(q_coolant, get_yes_or_no, Result_4),
@@ -95,9 +95,9 @@ decision_tree :-
       ask_question(q_number_of_rods, read_integer, Result_17),
       ask_question(q_rods_level, read_integer, Result_18),
       ask_question(q_moderator_type, read_stream_single_line, Result_19),
-      (Result_17 > 0, Result_18 > 10, (Result_19 is "Graffit" ; Result_19 is "Ciężka woda") -> 
+      (Result_17 > 0, Result_18 > 10, (Result_19 = "Graffit" ; Result_19 = "Woda") -> 
         system_message(d_rods_ok);
-      \+ (Result_17 > 0, Result_18 > 10, (Result_19 = "Graffit" ; Result_19 = "Ciężka woda")) -> 
+      \+ (Result_17 > 0, Result_18 > 10, (Result_19 = "Graffit" ; Result_19 = "Woda")) -> 
           system_message(d_rods_error)
       ),
   Result_2 = yes ->
@@ -149,9 +149,9 @@ decision_tree :-
     ask_question(q_number_of_rods, read_integer, Result_17),
     ask_question(q_rods_level, read_integer, Result_18),
     ask_question(q_moderator_type, read_stream_single_line, Result_19),
-      (Result_17 > 0, Result_18 > 10, (Result_19 = "Graffit" ; Result_19 = "Ciężka woda") -> 
+      (Result_17 > 0, Result_18 > 10, (Result_19 = "Graffit" ; Result_19 = "Woda") -> 
         system_message(d_rods_ok);
-      \+ (Result_17 > 0, Result_18 > 10, (Result_19 = "Graffit" ; Result_19 = "Ciężka woda")) -> 
+      \+ (Result_17 > 0, Result_18 > 10, (Result_19 = "Graffit" ; Result_19 = "Woda")) -> 
         system_message(d_rods_error)
       )
     )

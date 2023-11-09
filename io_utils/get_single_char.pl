@@ -1,8 +1,8 @@
-%get_char(Result) :- 
-%  get(Char),              % read a character
-%  get0(_),                % consume the Return after it
-%  char_code(Result,Char),
-%  !.  
+get_custom_char(Result) :- 
+  get(Char),              % read a character
+  get0(_),                % consume the Return after it
+  char_code(Result,Char),
+  !.  
 
  %interpret(65,a).  % ASCII 89  = 'Y'
  %interpret(97,a). % ASCII 121 = 'y'
