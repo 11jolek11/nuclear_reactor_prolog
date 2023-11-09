@@ -1,7 +1,7 @@
 get_char(Result) :- 
   get(Char),              % read a character
   get0(_),                % consume the Return after it
- interpret(Char,Result),
+ char_code(Result,Char),
  !.  
 
  interpret(65,a).  % ASCII 89  = 'Y'

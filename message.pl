@@ -18,7 +18,9 @@ user_message(q_pipes_connections) :-
 
 user_message(q_which_system) :-
   nl,
-  write("Który system chciałbyś sprawdzić?"),
+  write("Który system chciałbyś sprawdzić?"), nl,
+  write("a) System chłodzenia"), nl,
+  write("b) Prętów moderatora"),
   nl.
 
 
@@ -85,7 +87,7 @@ user_message(q_leak_from_control_rod) :-
   nl.
 
 user_message(q_reactor_shielding_damaged) :-
-  nl,
+  nl,f
   write("Czy osłona reaktora jest uszkodzona?"), 
   nl.
 
@@ -93,10 +95,10 @@ user_message(q_number_of_rods) :-
   nl,
   write("Podaj liczbę prętów: "), 
   nl.
-
+% Tu niech przyjmuje string:
 user_message(q_moderator_type) :-
   nl,
-  write("Podaj typ moderatora: "), 
+  write("Podaj typ moderatora: "),
   nl.
 
 user_message(q_rods_level) :-
@@ -115,15 +117,13 @@ system_message(d_buy_coolant) :-
   write("Brak odpowiedniej ilości chłodziwa w magazynie"),
   nl,
   write("Należy zakupić chłodziwo u autoryzowanego sprzedawcy"),
-  nl,
-  write("🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣 "),
+  % nl,
+  % write("🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣 "),
   nl.
 
 system_message(d_system_ok) :-
   nl,
   write("System działa sprawnie i jest gotowy do działania."),
-  nl,
-  write("Naciśnij START")
   nl.
 
 system_message(d_pipe_error) :-
@@ -142,13 +142,18 @@ system_message(d_rods_error) :-
   nl,
   write("Należy przeprowadzić manualną diagnozę prętów.")
   nl.
+
+system_message(d_rods_ok) :-
+  nl,
+  write("Pręty kontrolne zostały założone poprawnie."), nl
+  write("Można uruchomić reaktor, ale zaleca się dalszą diagnostykę"),
+  nl.
   
 
   system_message(d_reactor_damaged) :-
   nl,
-  write("Doszło do uszkodzenia reaktora, a w natępstwie wycieku radioaktywnych substancji i eksplozji. Nie zaleca się uruchomienia reaktora XD"), 
+  write("Doszło do uszkodzenia reaktora, a w natępstwie wycieku radioaktywnych substancji. Nie można uruchomić reaktora."), 
   nl.
-
 
 system_message(d_fire) :-
   nl,

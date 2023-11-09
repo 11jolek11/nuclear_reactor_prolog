@@ -1,10 +1,13 @@
 % To run main, run the Repl and type 'main.' into the prompt
 main :- write('Hello, world!').
 
-consult('./io_utils/get_list_of_numbers.pl').
-consult('./io_utils/get_list.pl').
-consult('./io_utils/get_number.pl').
-consult('./io_utils/get_yes_or_no.pl').
+:- consult('./io_utils/get_list_of_numbers.pl').
+:- consult('./io_utils/get_list.pl').
+:- consult('./io_utils/get_number.pl').
+:- consult('./io_utils/get_yes_or_no.pl').
+:- consult('./io_utils/get_single_char.pl').
+:- consult('./message.pl').
+:- consult('./io_utils/get_string.pl')
 
 start :-
     write('Witaj w systemie ekspertowym obsługi reaktora jądrowego.'),nl,
@@ -25,6 +28,12 @@ clear_answers :- retract(store_ans(_, _)), fail.
   
 % ask_question(Trigger, Typ_pobieranych_danych, Result) :- 
 ask_question(Trigger, Pobieracz_danych, Result) :- 
+  /*ensure_loaded('./message.pl'),
+  ensure_loaded('./io_utils/get_list_of_numbers.pl'),
+  ensure_loaded('./io_utils/get_list.pl'),
+  ensure_loaded('./io_utils/get_number.pl'),
+  ensure_loaded('./io_utils/get_yes_or_no.pl'),
+  ensure_loaded('./io_utils/get_single_char.pl'),*/
   user_message(Trigger),
   call(Pobieracz_danych, Result).
 
@@ -35,48 +44,90 @@ decision_tree :-
   % We do absolotely freaking nothing
 
   % Pytanie 2
-  ask_question(q_are_there_errors, get_yes_or_no, Result).
+  ask_question(q_are_there_errors, get_yes_or_no, Result_2),
+  (Result_2 = no ->
+    % Pytanie 3
+    ask_question(q_which_system, get_char, Result_3),
+    (Result_3 = a ->
+      % Pytanie 4
+      ask_question(q_coolant, get_yes_or_no, Result_4),
+      (Result_4 = no ->
+        % Pytanie 5
+        ask_question(q_coolant_quantity, read_integer, Result_5),
+        ask_user(q_coolant_quantity, Result_5),
+        % Pytanie 6
+        ask_question(
+          q_coolant_quantity_in_warehouse, read_integer, Result_6),
+          (Result_6 > 0 ->
+            system_message(d_coolant_from_warehouse);
+          Result_6 <= 0 ->
+            system_message(d_buy_coolant));
+      Result_4 = yes ->
+        % Pytanie 8
+        ask_question(q_humidity, get_yes_or_no, Result_8),
+        (Result_8 = yes ->
+          % Pytanie 7
+          ...;
+        Result_8 = no ->
+          % Pytanie 9
+          ask_question(q_water_spillage, get_yes_or_no, Result_9),
+          (Result_9 = no ->
+            % Pytanie 7
+            ...;
+          Result_9 = yes ->
+            system_message(d_remove_water))
+          ),
+        xd);
+    Result_3 = b ->
+      % Pytanie 17
+      ask_question(q_number_of_rods, read_integer, Result_17),
+      ask_question(q_rods_level, read_integer, Result_18),
+      ask_question(q_moderator_type, read_stream_single_line, Result_19),
+      (Result_17 > 0, Result_18 > 10, (Result_19 is "Graffit" ; Result_19 is "Ciężka woda") -> system_message(d_rods_ok)  ; system_message(d_rods_error)
+      );
+  Result_2 = yes ->
+  % Pytanie 10
+    ask_question(q_radiation, read_integer, Result_10),
+    % TODO(11jolek11): tu dodać gromadzenie wiedzy
+        (Result_10 <= 50 -> 
+        % Pytanie 12
+        ask_question(q_temperature_over_norm, get_yes_or_no, Result_12),
+            (Result_12 == yes -> 
+              % Pytanie 13
+              ask_question(q_co2_is_present, get_yes_or_no, Result_13),
+                (Result_13 == yes ->
+                  % Pytanie 15
+                  (ask_question(q_leak_from_control_rod, get_yes_or_no, Result_15),
+                    ( Result_15 == yes -> system_message(d_reactor_damaged); system_message(d_fire)))
+                  ;
+                  (
+                  % Pytanie 14
+                  % FIXME(11jolek11): Czy tu jest dobre pytanie?
+                    ask_question(q_cooling_diagnostics, get_yes_or_no, Result_14),
+                    (
+                    Result_14 = no -> system_message(d_ok_but_careful); ask_question(q_coolant, get_yes_or_no, Result_4)
+                    )
+                )
+            )
+        )
+    ;
+    %Pytanie 17
+    ask_question(q_number_of_rods, read_integer, Result_17),
+    ask_question(q_rods_level, read_integer, Result_18),
+    ask_question(q_moderator_type, read_stream_single_line, Result_19),
+    (Result_17 > 0, Result_18 > 10, (Result_19 is "Graffit" ; Result_19 is "Ciężka woda") -> system_message(d_rods_ok)  ; system_message(d_rods_error)
+    );
+    )
+)
 
 
 
-% dozymetry
-% Result - lista informacyjna o dozymetrze
-% Jeśli Result[0] in supported_brands && Result[1] in supported_models &&
-% int(Result[2]) > 10 ->
-%  ask_question(czy osłona uszkodzona);
-% eLsE ->
-%  ask_question(ile prętów))
 
-% unpack_ans(List, Brand, Model, Battery_level):-
 
-% unpack_single_element_from_list(Element, Tail, Input) :-
-  % append([Element], Tail, Input).
-  % [Marka|].
+.
 
-supported_dosimeter_models("XD-16").
-supported_dosimeter_models("WTF-15").
 
-supported_dosimeter_mark("Bosch").
+
 batter_level(Battery) :-
   integer(Battery),
   Battery >= 10.
-
-dosimeter_handling(Marka, Model, Battery) :-
-  ensure_loaded('./io_utils/get_list.pl'),
-  read_stream_lines(Lines),
-  [Marka|Model_battery] = Lines,
-  [Model|Tail] = Model_battery,
-  [Battery|T] = Tail,
-  supported_dosimeter_models(Model),
-  supported_dosimeter_mark(Marka),
-  batter_level(Battery).
-  
-  
-  
-
-unpack_single_element_from_list(Element, Tail, Tail).
-
-% show_records([]).
-% show_records([A|B]) :-
-%   format('ID = ~w\tName = ~w\tGrade = ~w~n',A),
-% show_records(B).
