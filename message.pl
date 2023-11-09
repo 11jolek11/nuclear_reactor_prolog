@@ -12,7 +12,8 @@ user_message(q_are_there_errors) :-
 
 user_message(q_pipes_connections) :-
   nl,
-  write("Wprowadź listę podłączeń rur do sprawdzenia: "),
+  write("Który z segmentów rur checesz sprawdzić:"),
+  write("a) "), nl,
   nl.
 
 
@@ -87,7 +88,7 @@ user_message(q_leak_from_control_rod) :-
   nl.
 
 user_message(q_reactor_shielding_damaged) :-
-  nl,f
+  nl,
   write("Czy osłona reaktora jest uszkodzona?"), 
   nl.
 
@@ -140,12 +141,13 @@ system_message(d_rods_error) :-
   nl,
   write("Prawdopodbnie, żle założono pręty kontrolne."),
   nl,
-  write("Należy przeprowadzić manualną diagnozę prętów.")
+  write("Należy przeprowadzić manualną diagnozę prętów."),
   nl.
 
 system_message(d_rods_ok) :-
   nl,
-  write("Pręty kontrolne zostały założone poprawnie."), nl
+  write("Pręty kontrolne zostały założone poprawnie."), 
+  nl,
   write("Można uruchomić reaktor, ale zaleca się dalszą diagnostykę"),
   nl.
   
