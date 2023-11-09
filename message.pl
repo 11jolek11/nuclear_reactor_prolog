@@ -12,8 +12,10 @@ user_message(q_are_there_errors) :-
 
 user_message(q_pipes_connections) :-
   nl,
-  write("Który z segmentów rur checesz sprawdzić:"),
-  write("a) "), nl,
+  write("Który z segmentów rur checesz sprawdzić: (wielokrotny wybór)"), nl,
+  write("a) kanalizacja"), nl,
+  write("b) połączenie magazyn - system chłodzenia"), nl,
+  write("c) system gaśniczy"), nl,
   nl.
 
 

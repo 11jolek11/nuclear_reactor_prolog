@@ -61,13 +61,14 @@ decision_tree :-
       (Result_4 = no ->
         % Pytanie 5
         ask_question(q_coolant_quantity, read_integer, Result_5),
-        ask_user(q_coolant_quantity, Result_5),
+        % ask_user(q_coolant_quantity, Result_5),
         % Pytanie 6
         ask_question(
           q_coolant_quantity_in_warehouse, read_integer, Result_6),
-          (Result_6 > 0 ->
-            system_message(d_coolant_from_warehouse);
-          Result_6 < 0 ->
+          (Result_6 > 60 ->
+          % FIXME(11jolek11): Throws false for no reason
+            system_message(d_coolant_from_warehouse), !;
+          Result_6 < 60 ->
             system_message(d_buy_coolant)
           );
       Result_4 = yes ->
@@ -76,16 +77,14 @@ decision_tree :-
         (Result_8 = yes ->
           % Pytanie 7
           ask_question(q_pipes_connections, read_stream_lines, Result_7),
-          check_pipe_connections(Result_7)
-        ,
+          check_pipe_connections(Result_7);
         Result_8 = no ->
           % Pytanie 9
           ask_question(q_water_spillage, get_yes_or_no, Result_9),
           (Result_9 = no ->
             % Pytanie 7
             ask_question(q_pipes_connections, read_stream_lines, Result_7),
-              check_pipe_connections(Result_7)
-            ,
+              check_pipe_connections(Result_7);
           Result_9 = yes ->
             system_message(d_remove_water)
           )
@@ -96,15 +95,17 @@ decision_tree :-
       ask_question(q_number_of_rods, read_integer, Result_17),
       ask_question(q_rods_level, read_integer, Result_18),
       ask_question(q_moderator_type, read_stream_single_line, Result_19),
-      (Result_17 > 0, Result_18 > 10, (Result_19 is "Graffit" ; Result_19 is "Ciężka woda") -> system_message(d_rods_ok)  ; system_message(d_rods_error)
-      );
-      % ###################################################################################
+      (Result_17 > 0, Result_18 > 10, (Result_19 is "Graffit" ; Result_19 is "Ciężka woda") -> 
+        system_message(d_rods_ok);
+      \+ (Result_17 > 0, Result_18 > 10, (Result_19 = "Graffit" ; Result_19 = "Ciężka woda")) -> 
+          system_message(d_rods_error)
+      ),
   Result_2 = yes ->
     write('no'),
   % Pytanie 10
     ask_question(q_radiation, read_integer, Result_10),
     % TODO(11jolek11): tu dodać gromadzenie wiedzy
-        (Result_10 < 50 -> 
+
         % Pytanie 12
         ask_question(q_temperature_over_norm, get_yes_or_no, Result_12),
             (Result_12 = yes -> 
@@ -112,31 +113,46 @@ decision_tree :-
               ask_question(q_co2_is_present, get_yes_or_no, Result_13),
                 (Result_13 = yes ->
                   % Pytanie 15
-                  (ask_question(q_leak_from_control_rod, get_yes_or_no, Result_15),
-                    ( Result_15 = yes -> system_message(d_reactor_damaged); system_message(d_fire)))
-                  ;
-                  (
+                    ask_question(q_leak_from_control_rod, get_yes_or_no, Result_15),
+                    (Result_15 = yes ->        
+                    system_message(d_reactor_damaged); 
+                  Result_15 = no -> system_message(d_fire));
+                Result_13 = no ->
                   % Pytanie 14
                   % FIXME(11jolek11): Czy tu jest dobre pytanie?
                     ask_question(q_cooling_diagnostics, get_yes_or_no, Result_14),
                     (
-                    Result_14 = no -> system_message(d_ok_but_careful); ask_question(q_coolant, get_yes_or_no, Result_4)
+                      Result_14 = no -> system_message(d_ok_but_careful); Result_14 = yes -> ask_question(q_coolant, get_yes_or_no, Result_4)
                     )
+                
+            );
+            Result_12 = no -> 
+              ask_question(q_humidity, get_yes_or_no, Result_8),
+              (Result_8 = yes ->
+                % Pytanie 7
+                ask_question(q_pipes_connections, read_stream_lines, Result_7),
+                check_pipe_connections(Result_7);
+              Result_8 = no ->
+                % Pytanie 9
+                ask_question(q_water_spillage, get_yes_or_no, Result_9),
+                (Result_9 = no ->
+                  % Pytanie 7
+                  ask_question(q_pipes_connections, read_stream_lines, Result_7),
+                    check_pipe_connections(Result_7);
+                Result_9 = yes ->
+                  system_message(d_remove_water)
                 )
-            )
+              )
         )
     ;
     %Pytanie 17
     ask_question(q_number_of_rods, read_integer, Result_17),
     ask_question(q_rods_level, read_integer, Result_18),
     ask_question(q_moderator_type, read_stream_single_line, Result_19),
-      (Result_17 > 0, Result_18 > 10, (Result_19 is "Graffit" ; Result_19 is "Ciężka woda") -> system_message(d_rods_ok)  ; system_message(d_rods_error))
+      (Result_17 > 0, Result_18 > 10, (Result_19 = "Graffit" ; Result_19 = "Ciężka woda") -> 
+        system_message(d_rods_ok);
+      \+ (Result_17 > 0, Result_18 > 10, (Result_19 = "Graffit" ; Result_19 = "Ciężka woda")) -> 
+        system_message(d_rods_error)
+      )
     )
-  ); ########## <--------------------------
-).
-
-
-
-batter_level(Battery) :-
-  integer(Battery),
-  Battery >= 10.
+  ).
