@@ -1,6 +1,4 @@
 :- abolish(store_ans/2).
-% To run main, run the Repl and type 'main.' into the prompt
-main :- write('Hello, world!').
 
 :- consult('./io_utils/get_list_of_numbers.pl').
 :- consult('./io_utils/get_list.pl').
@@ -48,7 +46,6 @@ decision_tree :-
   % Pytanie 1
   ask_question(q_reactor_number, read_integer, Result),
   % ask_user(q_reactor_number, Result),
-  % We do absolotely freaking nothing
 
   % Pytanie 2
   ask_question(q_are_there_errors, get_yes_or_no, Result_2),
@@ -66,7 +63,6 @@ decision_tree :-
         ask_question(
           q_coolant_quantity_in_warehouse, read_integer, Result_6),
           (Result_6 > 60 ->
-          % FIXME(11jolek11): Throws false for no reason
             system_message(d_coolant_from_warehouse), !;
           Result_6 < 60 ->
             system_message(d_buy_coolant)
@@ -104,8 +100,6 @@ decision_tree :-
   Result_2 = yes ->
   % Pytanie 10
     ask_question(q_radiation, read_integer, Result_10),
-    % TODO(11jolek11): tu dodać gromadzenie wiedzy
-
         % Pytanie 12
         ask_question(q_temperature_over_norm, get_yes_or_no, Result_12),
             (Result_12 = yes -> 
@@ -120,7 +114,6 @@ decision_tree :-
                       system_message(d_fire));
                 Result_13 = no ->
                   % Pytanie 14
-                  % FIXME(11jolek11): Czy tu jest dobre pytanie?
                     ask_question(q_cooling_diagnostics, get_yes_or_no, Result_14),
                     (Result_14 = no -> 
                       system_message(d_ok_but_careful); 
@@ -135,7 +128,6 @@ decision_tree :-
                         ask_question(
                           q_coolant_quantity_in_warehouse, read_integer, Result_6),
                           (Result_6 > 60 ->
-                          % FIXME(11jolek11): Throws false for no reason
                             system_message(d_coolant_from_warehouse), !;
                           Result_6 < 60 ->
                             system_message(d_buy_coolant)
@@ -181,7 +173,7 @@ decision_tree :-
               )
         )
     ;
-    %Pytanie 17
+    % Pytanie 17
     ask_question(q_number_of_rods, read_integer, Result_17),
     ask_question(q_rods_level, read_integer, Result_18),
     ask_question(q_moderator_type, read_stream_single_line, Result_19),
