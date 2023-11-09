@@ -1,13 +1,8 @@
-/*
- Reads symbol from stdin
- */
-get_yes_or_no(Result) :- get(Char),              % read a character
-                         get0(_),                % consume the Return after it
+get_yes_or_no(Result) :- get(Char),      % read a character
+                         get0(_),        % consume the Return after it
                          interpret(Char,Result),
-                         !.                      % cut -- see text
-/*
-Ask user for input
- */
+                         !.              % cut -- see text
+
 get_yes_or_no(Result) :- nl,
                          write('Type Y or N:'),
                          get_yes_or_no(Result).
