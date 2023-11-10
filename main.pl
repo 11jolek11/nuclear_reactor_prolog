@@ -22,7 +22,7 @@ start :-
     write('Kiedy zostaniesz poproszony o wprowadzenie kilku wartości (listy wartości), aby zakończyć wprowadzanie należy użyć kombinacji klawiszy Ctrl + D'), nl,
     % Clear the previous answers
     %clear_answers,
-    write("d"),
+    %write("d"),
     % Interact with user.
     decision_tree.
 
